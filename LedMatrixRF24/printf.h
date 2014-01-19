@@ -16,14 +16,6 @@
 #ifndef __PRINTF_H__
 #define __PRINTF_H__
 
-#define LOG_OUTPUT(x) Serial.print(x)
-#define LOG_OUTPUTN(x, y) Serial.print(x, y)
-#define LOG_OUTPUT_LINE(x) Serial.println(x)
-
-//#define LOG_OUTPUT(x)
-//#define LOG_OUTPUTN(x, y)
-//#define LOG_OUTPUT_LINE(x)
-
 #ifdef ARDUINO
 
 int serial_putc( char c, FILE * ) 

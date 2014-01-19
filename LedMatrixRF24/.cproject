@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="de.innot.avreclipse.configuration.app.debug.1701170608">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="de.innot.avreclipse.configuration.app.debug.1701170608" moduleId="org.eclipse.cdt.core.settings" name="Debug">
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -31,9 +33,9 @@
 								<option id="de.innot.avreclipse.compiler.option.debug.level.1855999398" name="Generate Debugging Info" superClass="de.innot.avreclipse.compiler.option.debug.level"/>
 								<option id="de.innot.avreclipse.compiler.option.optimize.1840003615" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.1342460466" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\cores\arduino&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\variants\standard&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\libraries&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\utils\_electronics\arduino-1.0\hardware\arduino\cores\arduino&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\utils\arduino-1.0\hardware\arduino\variants\standard&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\utils\_electronics\arduino-1.0\libraries&quot;"/>
 									<listOptionValue builtIn="false" value="../SPI"/>
 									<listOptionValue builtIn="false" value="../RF24"/>
 									<listOptionValue builtIn="false" value="../LiquidCrystal"/>
@@ -41,7 +43,6 @@
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1960722498" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=100"/>
-									<listOptionValue builtIn="false" value="UBRRH"/>
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.optimize.packstruct.256334734" name="Pack structs (-fpack-struct)" superClass="de.innot.avreclipse.compiler.option.optimize.packstruct" value="false" valueType="boolean"/>
 								<option id="de.innot.avreclipse.compiler.option.optimize.shortenums.1900199382" name="Short enums (-fshort-enums)" superClass="de.innot.avreclipse.compiler.option.optimize.shortenums" value="false" valueType="boolean"/>
@@ -54,9 +55,9 @@
 								<option id="de.innot.avreclipse.cppcompiler.option.debug.level.1782879802" name="Generate Debugging Info" superClass="de.innot.avreclipse.cppcompiler.option.debug.level"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.1203045859" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.418842624" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\cores\arduino&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\variants\standard&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\libraries&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\utils\_electronics\arduino-1.0\hardware\arduino\cores\arduino&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\utils\arduino-1.0\hardware\arduino\variants\standard&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\utils\_electronics\arduino-1.0\libraries&quot;"/>
 									<listOptionValue builtIn="false" value="../SPI"/>
 									<listOptionValue builtIn="false" value="../RF24"/>
 									<listOptionValue builtIn="false" value="../LiquidCrystal"/>
@@ -106,11 +107,11 @@
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="de.innot.avreclipse.configuration.app.release.328505743" moduleId="org.eclipse.cdt.core.settings" name="Release">
 				<externalSettings/>
 				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
 					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
@@ -131,9 +132,6 @@
 							<tool id="de.innot.avreclipse.tool.compiler.winavr.app.release.1748415550" name="AVR Compiler" superClass="de.innot.avreclipse.tool.compiler.winavr.app.release">
 								<option id="de.innot.avreclipse.compiler.option.debug.level.1296542721" name="Generate Debugging Info" superClass="de.innot.avreclipse.compiler.option.debug.level" value="de.innot.avreclipse.compiler.option.debug.level.none" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.optimize.76472063" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
-								<option id="de.innot.avreclipse.compiler.option.def.1189626511" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="UBRRH"/>
-								</option>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.64356538" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.cppcompiler.app.release.755042363" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.release">
