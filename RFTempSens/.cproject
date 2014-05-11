@@ -79,7 +79,6 @@
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="printf_flt"/>
 									<listOptionValue builtIn="false" value="scanf_flt"/>
-									<listOptionValue builtIn="false" value="core"/>
 								</option>
 								<option id="de.innot.avreclipse.cpplinker.option.libpath.141516236" name="Libraries Path (-L)" superClass="de.innot.avreclipse.cpplinker.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/arduino}&quot;"/>
@@ -166,22 +165,16 @@
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.;de.innot.avreclipse.tool.cppcompiler.app.release.755042363;de.innot.avreclipse.cppcompiler.input.159381843">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.;de.innot.avreclipse.tool.cppcompiler.app.debug.1485609648;de.innot.avreclipse.cppcompiler.input.2128205279">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.;de.innot.avreclipse.tool.compiler.winavr.app.release.1748415550;de.innot.avreclipse.compiler.winavr.input.64356538">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.;de.innot.avreclipse.tool.cppcompiler.app.release.755042363;de.innot.avreclipse.cppcompiler.input.159381843">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.;de.innot.avreclipse.tool.compiler.winavr.app.debug.1340038046;de.innot.avreclipse.compiler.winavr.input.871932853">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 	</storageModule>

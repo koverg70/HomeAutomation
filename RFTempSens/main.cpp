@@ -91,9 +91,9 @@ rf_message_res1 res;
 char buff[20];
 
 void loop(void) {
-	readDS(msg);
 	readDHT11(msg);
-	msg.device_id = 1;
+	readDS(msg);
+	msg.device_id = 2;
 	msg.device_time = 0;
 	print_sens1(msg);
 
@@ -167,7 +167,7 @@ void readDHT11(rf_message_sens1 &msg) {
  A DS18B20 olvasása és kiírása
  */
 
-#define ONEWIREPIN  7		/* OneWire bus on digital pin 7 */
+#define ONEWIREPIN  2	 	/* OneWire bus on digital pin 7 */
 #define MAXSENSORS  5		/* Maximum number of sensors on OneWire bus */
 
 // Model IDs
@@ -239,8 +239,12 @@ void initDS(void) {
 			LOG_OUTPUT(" powered");
 		}LOG_OUTPUT_LINE();
 		sensors++;
-	}LOG_OUTPUTN(sensors, DEC);
+	}
+	LOG_OUTPUTN(sensors, DEC);
 	LOG_OUTPUT(" sensors found");
+	LOG_OUTPUT_LINE();
+	LOG_OUTPUT("OneWire pin: ");
+	LOG_OUTPUTN(ONEWIREPIN, DEC);
 	LOG_OUTPUT_LINE();
 	for (i = 0; i < sensors; i++) {
 		LOG_OUTPUT("temp");
