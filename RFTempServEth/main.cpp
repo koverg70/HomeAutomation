@@ -1,15 +1,27 @@
+/**
+ * Home automation Ethernet Server v1.0.1
+ * (c) Gabor KÖVÉR 2013-2014
+ *
+ * TODO:
+ *   - mutassa, hogy éppen melyik idõzítés az aktív
+ *   - mutassuk meg a fûtés estén is az utolsó észlelési idõt és a leghosszabb várakozást
+ */
+
 #define UBRRH // if you need Serial
 #include <Arduino.h>
 #include "printf.h"
-#include <SPI.h>
-#include "nRF24L01.h"
-#include "RF24.h"
+#include "SPI/SPI.h"
+#include "RF24/nRF24L01.h"
+#include "RF24/RF24.h"
 #include "rf_message.h"
 #include "EtherShield/etherShield.h"
 #include "Time/Time.h"
-#include <EEPROM/EEPROM.h>
+#include "EEPROM/EEPROM.h"
 
 #define LED_PIN 19
+
+extern bool IsDST(int year, int month, int day);
+extern char dow(int y, char m, char d);
 
 //
 // Hardware configuration
@@ -34,7 +46,7 @@ static uint8_t ntpip[4] = { 193, 224, 45, 107 };
 //-----------------------------------------------------------
 // WWW
 #define MYWWWPORT 80
-#define BUFFER_SIZE 550
+#define BUFFER_SIZE 800
 static uint8_t buf[BUFFER_SIZE + 1];
 //-----------------------------------------------------------
 #define GMT_ZONE 1
@@ -50,29 +62,42 @@ static uint8_t buf[BUFFER_SIZE + 1];
   (byte & 0x02 ? 1 : 0), \
   (byte & 0x01 ? 1 : 0)
 
+#define MAX_SENSORS 9
 //-- server state
 static time_t startTime = 0;
-static time_t lastSensorData = 0;
-static uint32_t longestSensorWait = 0;
-int8_t tempDHT11;		// the temperature
-int8_t humidityDHT11;	// the humidity
-int16_t tempDS18B20;	// the temperature multiplied by 100
+static time_t lastSensorData[MAX_SENSORS];
+static uint32_t longestSensorWait[MAX_SENSORS];
+int8_t tempDHT11[MAX_SENSORS];		// the temperature
+int8_t humidityDHT11[MAX_SENSORS];	// the humidity
+int16_t tempDS18B20[MAX_SENSORS];	// the temperature multiplied by 100
+time_t lastHttp = 0;
 
-void setup() {
-
-	Serial.begin(9600);
-	printf_begin();
-	printf("\n\rnRF24 Temperature Server with Ethernet\n\r");
-	printf("\n\r(c) koverg70 2013\n\r");
-
+void initEthernet()
+{
 	es.ES_enc28j60Init(mymac);
 	Serial.println("mac address set");
 	// init the ethernet/ip layer:
 	es.ES_init_ip_arp_udp_tcp(mymac, myip, MYWWWPORT);
 	es.ES_client_set_gwip(gwip);
 	Serial.println("ip layer set");
-	es.ES_client_ntp_request(buf, ntpip, 25000);
+	setTime(0);
+	lastHttp = now();
+}
 
+void setup() {
+
+	for (int i = 0; i < MAX_SENSORS; ++i)
+	{
+		lastSensorData[i] = 0;
+		longestSensorWait[i] = 0;
+	}
+
+	Serial.begin(9600);
+	printf_begin();
+	printf("\n\rnRF24 Temperature Server with Ethernet\n\r");
+	printf("\n\r(c) koverg70 2013\n\r");
+
+	initEthernet();
 
 	//
 	// Print preamble
@@ -117,6 +142,7 @@ void setup() {
 	//
 	radio.startListening();
 
+	es.ES_client_ntp_request(buf, ntpip, 25000);
 }
 
 int checksum(rf_message_res2 *res)
@@ -193,13 +219,52 @@ uint16_t http200ok(void)
 // prepare the webpage by writing the data to the tcp send buffer
 uint16_t print_webpage(uint8_t *buf)
 {
+	time_t nnn = now();
 	uint16_t plen;
 	char timeBuff[96];
 	plen = http200ok();
 	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("{time: \""));
 	timeDateToText(now(), timeBuff);
 	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-	plen = es.ES_fill_tcp_data_p(buf, plen, PSTR("\", settings: \""));
+	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", start: \""));
+	ltoa(nnn - startTime, timeBuff, 10);
+	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\""));
+
+	for (int i = 0; i < MAX_SENSORS; ++i)
+	{
+		if (lastSensorData[i] != 0)
+		{
+			itoa(i, timeBuff, 10);
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR(", sensors"));
+			plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR(": {"));
+
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("lastReceived: \""));
+			itoa(nnn - lastSensorData[i], timeBuff, 10);
+			plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", longestWait: \""));
+			itoa(longestSensorWait[i], timeBuff, 10);
+			plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", tempDHT11: \""));
+			itoa(tempDHT11[i], timeBuff, 10);
+			plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", humidityDHT11: \""));
+			itoa(humidityDHT11[i], timeBuff, 10);
+			plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+
+			plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", tempDS18B20: \""));
+			ltoa(tempDS18B20[i], timeBuff, 10);
+			plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
+
+			plen = es.ES_fill_tcp_data_p(buf, plen, PSTR("\"}"));
+		}
+	}
+
+	plen = es.ES_fill_tcp_data_p(buf, plen, PSTR(", settings: \""));
 	for (int i = 0; i < SETTINGS_SIZE; ++i)
 	{
 		byte b = EEPROM.read(i);
@@ -211,29 +276,6 @@ uint16_t print_webpage(uint8_t *buf)
 		timeBuff[i] = b;
 	}
 	timeBuff[SETTINGS_SIZE] = 0;
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", start: \""));
-	timeDateToText(startTime, timeBuff);
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-
-	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", lastSensorData: \""));
-	timeDateToText(lastSensorData, timeBuff);
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-
-	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", longestSensorWait: \""));
-	itoa(longestSensorWait, timeBuff, 10);
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-
-	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", tempDHT11: \""));
-	itoa(tempDHT11, timeBuff, 10);
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-
-	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", humidityDHT11: \""));
-	itoa(humidityDHT11, timeBuff, 10);
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
-
-	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("\", tempDS18B20: \""));
-	ltoa(tempDS18B20, timeBuff, 10);
 	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
 
 	plen = es.ES_fill_tcp_data_p(buf, plen, PSTR("\"}\0"));
@@ -288,14 +330,14 @@ void loop(void)
 				}
 				res2.checksum = 0;
 
-				printf ("\r\nTiming: ");
-				for (int i = 0; i < 12; ++i)
-				{
-					printf (BYTETOBINARYPATTERN, BYTETOBINARY(res2.timing[i]));
-				}
+//				printf ("\r\nTiming: ");
+//				for (int i = 0; i < 12; ++i)
+//				{
+//					printf (BYTETOBINARYPATTERN, BYTETOBINARY(res2.timing[i]));
+//				}
 
 				res2.checksum = checksum(&res2);
-				printf("\r\nChecksum: %d", res2.checksum);
+//				printf("\r\nChecksum: %d", res2.checksum);
 
 				// First, stop listening so we can talk
 				radio.stopListening();
@@ -307,22 +349,24 @@ void loop(void)
 			}
 			else
 			{
-				// save data
-				tempDHT11 = msg.u1.sens1.tempDHT11;
-				humidityDHT11 = msg.u1.sens1.humidityDHT11;
-				tempDS18B20 = msg.u1.sens1.tempDS18B20;
-				time_t nnn = now();
-				unsigned int w = nnn - lastSensorData;
-				if (w > longestSensorWait && lastSensorData != 0)
+				int index = 0;
+				if (msg.device_id > 0 && msg.device_id <= 8)
 				{
-					longestSensorWait = w;
+					index = msg.device_id;
 				}
-				lastSensorData = nnn;
+				// save data
+				tempDHT11[index] = msg.u1.sens1.tempDHT11;
+				humidityDHT11[index] = msg.u1.sens1.humidityDHT11;
+				tempDS18B20[index] = msg.u1.sens1.tempDS18B20;
+				time_t nnn = now();
+				lastSensorData[index] = nnn;
 
 				printf("\r\nSending response...");
 				// First, stop listening so we can talk
 				radio.stopListening();
 				// Send the final one back.
+				res.device_id = 50;	// TODO: most 50-es a heater és a központ is ???
+				res.device_time = nnn;
 				radio.write(&res, sizeof(rf_message_res1));
 
 				printf("\r\nResponse sent...");
@@ -359,6 +403,10 @@ void loop(void)
 			if (es.ES_client_ntp_process_answer(buf, &time, 25000))
 			{
 				startTime = time - 2208988800UL + (GMT_ZONE * 60 * 60); // 70 years back plus the GTM shift
+				if (IsDST(year(startTime), month(startTime), day(startTime)))
+				{
+					startTime += 60 * 60;	// one hour because it's a daylight saving day
+				}
 				setTime(startTime);
 				//Serial.println("Time adjusted with NTP time.");
 			}
@@ -375,6 +423,7 @@ void loop(void)
 			else if (strncmp("/S-", (char *) &(buf[dat_p + 4]), 3) == 0)
 			{
 				char *p = (char *) &(buf[dat_p + 7]);
+				printf("\r\nIdõzítések beállítása: %s",  p);
 				// idõzítések beállítása
 				for (int i = 0; i < SETTINGS_SIZE; ++i)
 				{
@@ -401,6 +450,27 @@ void loop(void)
 			dat_p = es.ES_fill_tcp_data_p(buf, dat_p, PSTR("<h1>200 OK</h1>"));
 		}
 		es.ES_www_server_reply(buf, dat_p); // send web page data
+
+		lastHttp = now();
+	}
+
+	time_t nnn = now();
+
+	if (nnn - lastHttp > 120)
+	{
+		initEthernet();
+	}
+
+	for (int index = 0; index < MAX_SENSORS; ++index)
+	{
+		if (lastSensorData[index] != 0)
+		{
+			unsigned int w = nnn - lastSensorData[index];
+			if (w > longestSensorWait[index])
+			{
+				longestSensorWait[index] = w;
+			}
+		}
 	}
 }
 

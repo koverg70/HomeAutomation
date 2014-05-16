@@ -12,7 +12,7 @@
 #include <Arduino.h>
 #endif
 
-#include <SPI.h>
+#include "../SPI/SPI.h"
 #include "nRF24L01.h"
 #include "RF24.h"
 

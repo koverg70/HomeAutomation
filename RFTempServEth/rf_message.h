@@ -9,7 +9,7 @@
 #ifndef RF_MESSAGE_H_
 #define RF_MESSAGE_H_
 
-#include <Time/Time.h>
+#include "Time/Time.h"
 
 typedef struct rf_message_sens1	// sensor type 1 message
 {

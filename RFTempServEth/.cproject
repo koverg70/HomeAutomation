@@ -31,13 +31,8 @@
 								<option id="de.innot.avreclipse.compiler.option.debug.level.1855999398" name="Generate Debugging Info" superClass="de.innot.avreclipse.compiler.option.debug.level"/>
 								<option id="de.innot.avreclipse.compiler.option.optimize.1840003615" name="Optimization Level" superClass="de.innot.avreclipse.compiler.option.optimize" value="de.innot.avreclipse.compiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.compiler.option.incpath.1342460466" name="Include Paths (-I)" superClass="de.innot.avreclipse.compiler.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\cores\arduino&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\variants\standard&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\libraries&quot;"/>
-									<listOptionValue builtIn="false" value="../SPI"/>
-									<listOptionValue builtIn="false" value="../RF24"/>
-									<listOptionValue builtIn="false" value="../LiquidCrystal"/>
-									<listOptionValue builtIn="false" value="../SoftwareSerial"/>
+									<listOptionValue builtIn="false" value="../arduino"/>
 								</option>
 								<option id="de.innot.avreclipse.compiler.option.def.1960722498" name="Define Syms (-D)" superClass="de.innot.avreclipse.compiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=100"/>
@@ -54,13 +49,8 @@
 								<option id="de.innot.avreclipse.cppcompiler.option.debug.level.1782879802" name="Generate Debugging Info" superClass="de.innot.avreclipse.cppcompiler.option.debug.level"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.optimize.1203045859" name="Optimization Level" superClass="de.innot.avreclipse.cppcompiler.option.optimize" value="de.innot.avreclipse.cppcompiler.optimize.size" valueType="enumerated"/>
 								<option id="de.innot.avreclipse.cppcompiler.option.incpath.418842624" name="Include Paths (-I)" superClass="de.innot.avreclipse.cppcompiler.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\cores\arduino&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\hardware\arduino\variants\standard&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;D:\utils\Electronics\arduino-1.0\libraries&quot;"/>
-									<listOptionValue builtIn="false" value="../SPI"/>
-									<listOptionValue builtIn="false" value="../RF24"/>
-									<listOptionValue builtIn="false" value="../LiquidCrystal"/>
-									<listOptionValue builtIn="false" value="../SoftwareSerial"/>
+									<listOptionValue builtIn="false" value="../arduino"/>
 								</option>
 								<option id="de.innot.avreclipse.cppcompiler.option.def.1021615526" name="Define Syms (-D)" superClass="de.innot.avreclipse.cppcompiler.option.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ARDUINO=100"/>
@@ -81,7 +71,6 @@
 									<listOptionValue builtIn="false" value="m"/>
 									<listOptionValue builtIn="false" value="printf_flt"/>
 									<listOptionValue builtIn="false" value="scanf_flt"/>
-									<listOptionValue builtIn="false" value="core"/>
 								</option>
 								<option id="de.innot.avreclipse.cpplinker.option.libpath.141516236" name="Libraries Path (-L)" superClass="de.innot.avreclipse.cpplinker.option.libpath" valueType="stringList">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/arduino}&quot;"/>
@@ -174,23 +163,20 @@
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.;de.innot.avreclipse.tool.cppcompiler.app.debug.1485609648;de.innot.avreclipse.cppcompiler.input.2128205279">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.;de.innot.avreclipse.tool.compiler.winavr.app.release.1748415550;de.innot.avreclipse.compiler.winavr.input.64356538">
+		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.;de.innot.avreclipse.tool.cppcompiler.app.release.755042363;de.innot.avreclipse.cppcompiler.input.159381843">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.;de.innot.avreclipse.tool.compiler.winavr.app.release.1748415550;de.innot.avreclipse.compiler.winavr.input.64356538">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.;de.innot.avreclipse.tool.compiler.winavr.app.debug.1340038046;de.innot.avreclipse.compiler.winavr.input.871932853">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.release.328505743;de.innot.avreclipse.configuration.app.release.328505743.">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileC"/>
+		<scannerConfigBuildInfo instanceId="de.innot.avreclipse.configuration.app.debug.1701170608;de.innot.avreclipse.configuration.app.debug.1701170608.;de.innot.avreclipse.tool.cppcompiler.app.debug.1485609648;de.innot.avreclipse.cppcompiler.input.2128205279">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="de.innot.avreclipse.core.AVRGCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>
