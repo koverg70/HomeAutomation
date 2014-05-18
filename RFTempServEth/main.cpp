@@ -46,8 +46,9 @@ static uint8_t ntpip[4] = { 193, 224, 45, 107 };
 //-----------------------------------------------------------
 // WWW
 #define MYWWWPORT 80
-#define BUFFER_SIZE 800
+#define BUFFER_SIZE 550					// DO NOT MODIFY!!!!
 static uint8_t buf[BUFFER_SIZE + 1];
+char timeBuff[30];
 //-----------------------------------------------------------
 #define GMT_ZONE 1
 #define SETTINGS_SIZE 96
@@ -62,7 +63,7 @@ static uint8_t buf[BUFFER_SIZE + 1];
   (byte & 0x02 ? 1 : 0), \
   (byte & 0x01 ? 1 : 0)
 
-#define MAX_SENSORS 9
+#define MAX_SENSORS 4
 //-- server state
 static time_t startTime = 0;
 static time_t lastSensorData[MAX_SENSORS];
@@ -70,7 +71,6 @@ static uint32_t longestSensorWait[MAX_SENSORS];
 int8_t tempDHT11[MAX_SENSORS];		// the temperature
 int8_t humidityDHT11[MAX_SENSORS];	// the humidity
 int16_t tempDS18B20[MAX_SENSORS];	// the temperature multiplied by 100
-time_t lastHttp = 0;
 
 void initEthernet()
 {
@@ -81,7 +81,8 @@ void initEthernet()
 	es.ES_client_set_gwip(gwip);
 	Serial.println("ip layer set");
 	setTime(0);
-	lastHttp = now();
+	delay(2000);
+	es.ES_client_ntp_request(buf, ntpip, 25000);
 }
 
 void setup() {
@@ -141,8 +142,6 @@ void setup() {
 	// Start listening
 	//
 	radio.startListening();
-
-	es.ES_client_ntp_request(buf, ntpip, 25000);
 }
 
 int checksum(rf_message_res2 *res)
@@ -221,7 +220,6 @@ uint16_t print_webpage(uint8_t *buf)
 {
 	time_t nnn = now();
 	uint16_t plen;
-	char timeBuff[96];
 	plen = http200ok();
 	plen = es.ES_fill_tcp_data_p(buf,plen, PSTR("{time: \""));
 	timeDateToText(now(), timeBuff);
@@ -273,10 +271,10 @@ uint16_t print_webpage(uint8_t *buf)
 		{
 			b = '0';
 		}
-		timeBuff[i] = b;
+		timeBuff[0] = b;
+		timeBuff[1] = 0;
+		plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
 	}
-	timeBuff[SETTINGS_SIZE] = 0;
-	plen = es.ES_fill_tcp_data(buf,plen, timeBuff);
 
 	plen = es.ES_fill_tcp_data_p(buf, plen, PSTR("\"}\0"));
 	return plen;
@@ -450,15 +448,21 @@ void loop(void)
 			dat_p = es.ES_fill_tcp_data_p(buf, dat_p, PSTR("<h1>200 OK</h1>"));
 		}
 		es.ES_www_server_reply(buf, dat_p); // send web page data
-
-		lastHttp = now();
 	}
 
 	time_t nnn = now();
 
-	if (nnn - lastHttp > 120)
+	// if the data is wrong (no NTP server was reachable during startup)
+	// try to get the current time again
+	if (year() < 2014 && nnn - startTime > 180)
 	{
-		initEthernet();
+		startTime = nnn;
+		for (int i = 0; i < MAX_SENSORS; ++i)
+		{
+			lastSensorData[i] = 0;
+			longestSensorWait[i] = 0;
+		}
+		es.ES_client_ntp_request(buf, ntpip, 25000);
 	}
 
 	for (int index = 0; index < MAX_SENSORS; ++index)
