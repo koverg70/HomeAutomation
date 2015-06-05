@@ -49,6 +49,9 @@ void setup() {
 	// Print preamble
 	//
 	pinMode(LED_PIN, OUTPUT);
+	pinMode(14, OUTPUT);
+	digitalWrite(14, HIGH);
+
 
 	//
 	// Setup and configure rf radio
@@ -73,14 +76,23 @@ void setup() {
 	// Start listening
 	//
 
-	if (radio.read_register(RX_ADDR_P2) == 0xc3) {
-		for (int i = 0; i < 10; ++i) {
+	if (radio.read_register(RX_ADDR_P2) == 0xc3)
+	{
+		printf("Radio test OK\r\n");
+		for (int i = 0; i < 10; ++i)
+		{
 			digitalWrite(LED_PIN, HIGH);
 			delay(100);
 			digitalWrite(LED_PIN, LOW);
 			delay(100);
 		}
 	}
+	else
+	{
+		printf("Radio test FAILED\r\n");
+	}
+
+	digitalWrite(14, LOW);
 }
 
 long cur_pos = 0;
@@ -93,7 +105,7 @@ char buff[20];
 void loop(void) {
 	readDHT11(msg);
 	readDS(msg);
-	msg.device_id = 2;
+	msg.device_id = 3;
 	msg.device_time = 0;
 	print_sens1(msg);
 
@@ -146,7 +158,7 @@ void loop(void) {
 	enterSleep();
 	enterSleep();
 	radio.powerUp();
-	delay(10);
+	delay(200);
 }
 
 /*
@@ -157,9 +169,11 @@ void loop(void) {
 dht DHT;
 
 void readDHT11(rf_message_sens1 &msg) {
-	DHT.read11(dht_dpin);
+	DHT.read22(dht_dpin);
 
-	msg.u1.sens1.tempDHT11 = (int8_t) DHT.temperature;
+	printf("Temp: %4.2f\r\n", DHT.temperature);
+	msg.u1.sens1.tempDHT11 = (int8_t) (DHT.temperature);
+	msg.u1.sens1.tempDS18B20 = (int16_t) (DHT.temperature * 100);
 	msg.u1.sens1.humidityDHT11 = (int8_t) DHT.humidity;
 }
 
