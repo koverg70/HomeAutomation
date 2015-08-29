@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Datepicker - Format date</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+  
+   <link rel="stylesheet" type="text/css" href="css/jchartfx.attributes.css" />
+   <link rel="stylesheet" type="text/css" href="css/jchartfx.palette.css" />
+   <link rel="stylesheet" type="text/css" href="main.css" />
+   
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  
+   <script type="text/javascript" src="js/jchartfx.system.js"></script>
+   <script type="text/javascript" src="js/jchartfx.coreBasic.js"></script>  
+   
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+    $( "#datepicker" ).datepicker( "option", "dateFormat", "yy/mm/dd" );
+    $( "#datepicker" ).change(function() {
+      loadChart();
+    });
+  });
+  </script>
+</head>
+<body>
+ 
+<p>Date: <input type="text" id="datepicker" size="10" value="2014/12/26"></p>
+ 
+<div id="ChartDiv" style="width:600px;height:400px"></div>
+
+<script type="text/javascript" language="javascript">
+     $(function() {
+        $( "#datepicker" ).datepicker("option", "dateFormat", "yy/mm/dd");
+      });
+
+    Number.prototype.padLeft = function (n,str){
+        return Array(n-String(this).length+1).join(str||'0')+this;
+    }
+    
+    function convertTemp(t, bounds)
+    {
+        var ret = new Number(t)/100;
+        if (ret > 80)
+        {
+            ret = (bounds.max + bounds.min)/2;
+        }
+        if (!bounds.min)
+        {
+            bounds.min = ret;
+        }
+        else if (ret < bounds.min)
+        {
+            bounds.min = ret;
+        }
+        if (!bounds.max)
+        {
+            bounds.max = ret;
+        }
+        else if (bounds.max < ret)
+        {
+            bounds.max = ret;
+        }
+        
+        return ret;
+    }
+    
+    function convertHumi(h, bounds)
+    {
+        var ret = new Number(h);
+        if (!bounds.minh)
+        {
+            bounds.minh = ret;
+        }
+        else if (ret < bounds.minh)
+        {
+            bounds.minh = ret;
+        }
+        if (!bounds.maxh)
+        {
+            bounds.maxh = ret;
+        }
+        else if (bounds.maxh < ret)
+        {
+            bounds.maxh = ret;
+        }
+        
+        return ret;
+    }    
+    
+    var chart1;
+    function loadChart()
+      {       
+            var dispdate = document.getElementById("datepicker").value;
+            var data = [];
+            var shift = 0;
+            var bounds = {};
+            jQuery.ajaxSetup({async:false});
+            for (var i = 0; i < 24; ++i)
+            {
+                for (var j = 0; j < 60; j += 10)
+                {
+                    $.get("http://pluto.gkov.hu:4680/autom_data/" + dispdate + "/" + i.padLeft(2, '0') + (j + shift).padLeft(2, '0') + ".json", function (d) {
+                        var item = {};
+                        item["Time"] = d.time.substring(11, 17);
+                        
+                        if (d.sensors1)
+                        {
+                            item["Akvárium %"] = convertHumi(d.sensors1.humidityDHT11, bounds);
+                            item["Akvárium °C"] = convertTemp(d.sensors1.tempDS18B20, bounds);
+                        }
+
+                        if (d.sensors2)
+                        {
+                            item["Dolgozó %"] = convertHumi(d.sensors2.humidityDHT11, bounds);
+                            item["Dolgozó °C"] = convertTemp(d.sensors2.tempDS18B20, bounds);
+                        }
+
+                        if (d.sensors3)
+                        {
+                            item["Nappali %"] = convertHumi(d.sensors3.humidityDHT11, bounds);
+                            item["Nappali °C"] = convertTemp(d.sensors3.tempDS18B20, bounds);
+                        }
+                        
+                        data.push(item);
+                    }, "json").fail(function() {
+                        shift = (shift + 1) % 2;
+                    } );
+                }
+            }
+            
+            var create = false;
+            if (chart1 == null)
+            {
+                chart1 = new cfx.Chart();
+                create = true;
+            }
+            chart1.getData().setSeries(6);
+            chart1.setGallery(cfx.Gallery.Area);
+            
+            // Y1 - a hőmérsékletek
+            var axisY1 = chart1.getAxisY();
+            axisY1.setMin(bounds.min - 1);
+            axisY1.setMax(bounds.max + 1);
+            var series1 = chart1.getSeries().getItem(1);
+            series1.setGallery(cfx.Gallery.Curve);
+            series1.setAxisY(axisY1);
+            var series2 = chart1.getSeries().getItem(3);
+            series2.setGallery(cfx.Gallery.Curve);
+            series2.setAxisY(axisY1);
+            var series3 = chart1.getSeries().getItem(5);
+            series3.setGallery(cfx.Gallery.Curve);
+            series3.setAxisY(axisY1);
+
+            // Y2 - a páratartalom
+            var axisY2 = chart1.getAxisY2();
+            axisY2.setMin(20);
+            axisY2.setMax(100);
+            var series4 = chart1.getSeries().getItem(0);
+            //series4.setGallery(cfx.Gallery.Curve);
+            series4.setAxisY(axisY2);
+            var series5 = chart1.getSeries().getItem(2);
+            //series5.setGallery(cfx.Gallery.Curve);
+            series5.setAxisY(axisY2);
+            var series6 = chart1.getSeries().getItem(4);
+            //series6.setGallery(cfx.Gallery.Curve);
+            series6.setAxisY(axisY2);
+
+            chart1.getAllSeries().setMarkerShape(cfx.MarkerShape.None);
+            chart1.setDataSource(data);
+            var divHolder = document.getElementById('ChartDiv');
+            if (create)
+            {
+                chart1.create(divHolder);            
+            }
+      }
+</script>
+
+</body>
+</html>

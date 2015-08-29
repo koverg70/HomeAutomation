@@ -1,0 +1,68 @@
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width; initial-scale=0.7;" />
+	<link rel='stylesheet' type='text/css' href='main.css' />
+	<script type='text/javascript' src='main.js'></script>
+</head>
+
+<body onload="load()" background="futes_bg.png">
+  <h2>Otthoni automatizálás</h2>
+  <p>Aktuális idő: <span id="clock">?</span><button type="button" onclick="window.location.href='graph.html'">Grafikon</button><p>
+  <p>Vezérlő indítás: <span id="start">?</span></p>
+
+  <table id='temptable'>
+    <tr>
+      <th>
+        </td>
+        <th>Hőmérs.</th>
+        <th>Páratart.</th>
+        <th>DHT</th>
+        <th>Utolsó é.</th>
+        <th>Várakoz.</th>
+    </tr>
+    <tr>
+      <td><b>Akvárium</b>
+      </td>
+      <td><span id="tempDS18B20_1">?</span>°C</td>
+      <td><span id="humidityDHT11_1">?</span>%</td>
+      <td><span id="tempDHT11_1">?</span>°C</td>
+      <td><span id="lastSensorData_1">?</span>
+      </td>
+      <td><span id="longestSensorWait_1">? mp</span>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Dolgozó</b>
+      </td>
+      <td><span id="tempDS18B20_2">?</span>°C</td>
+      <td><span id="humidityDHT11_2">?</span>%</td>
+      <td><span id="tempDHT11_2">?</span>°C</td>
+      <td><span id="lastSensorData_2">?</span>
+      </td>
+      <td><span id="longestSensorWait_2">? mp</span>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Nappali</b>
+      </td>
+      <td><span id="tempDS18B20_3">?</span>°C</td>
+      <td><span id="humidityDHT11_3">?</span>%</td>
+      <td><span id="tempDHT11_3">?</span>°C</td>
+      <td><span id="lastSensorData_3">?</span>
+      </td>
+      <td><span id="longestSensorWait_3">? mp</span>
+      </td>
+    </tr>
+  </table>
+  <p></p>
+
+  <div id="checkTable">
+  </div>
+<!--
+  <button type="button" onclick="loadXMLDoc()">Refresh</button>
+  <button type="button" onclick="sendSettings()">Send</button>
+-->
+</body>
+</html>
